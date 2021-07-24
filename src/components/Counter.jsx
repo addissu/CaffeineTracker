@@ -8,7 +8,8 @@ const caffeineTotalKeys = Object.keys(coffeeDrinks.caffeineTotal).sort();
 const originalState = {
     numOfDrinks: 1,
     currDrinkCaffeine: coffeeDrinks.caffeineTotal[caffeineTotalKeys[0]],
-    total: 0
+    total: 0,
+    nameChange: ''
 }
 
 class Counter extends Component {
@@ -29,6 +30,11 @@ class Counter extends Component {
     handleNumOfDrinksChange = (event) => {
         this.setState ({
             numOfDrinks: Number(event.target.value)
+        })
+    }
+    handleNameChange = (event) => {
+        this.setState ({
+            nameChange: String(event.target.value)
         })
     }
     //function to get current state, plus selected drink, multiplied by number of drinks 
@@ -52,7 +58,7 @@ class Counter extends Component {
             
             <form onSubmit={this.handleSubmit}>
                 <label>Full Name</label>
-                <input 
+                <input onChange={this.handleNameChange}
                     type="text"
                     required
                    
@@ -71,7 +77,12 @@ class Counter extends Component {
                 <label> How many drinks did you have? </label>
                 
                 <select onChange={this.handleNumOfDrinksChange}>
-                    <option value="1" >1</option>
+                {[...Array(25).keys()].map(idx =>
+                    <option value={idx + 1} key={idx + 1}>{idx + 1}</option>
+)}
+
+
+                    {/* <option value="1" >1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -83,7 +94,7 @@ class Counter extends Component {
                     <option value="10">10</option>
                     <option value="11">11</option>
                     <option value="12">12</option>
-                    <option value="13">13</option>
+                    <option value="13">13</option> */}
 
 
                 </select>
@@ -93,16 +104,19 @@ class Counter extends Component {
             </form>
             
             <div>
+                Name: {this.state.nameChange} <br>
+                </br>
                 Current Caffeine Total:  {this.state.total}mg 
             </div>
             <div>
                 {
+                    
                     //while total is less than 500mg, this will run
                     this.state.total < MAX_Caffeine ? `You have ${MAX_Caffeine - this.state.total}mg of caffeine left to drink`: 
                     //if total mg equalls 500, this will run
                     this.state.total === MAX_Caffeine ? `You have reached your daily intake`:
                     //if more than 500mg was drank, this will run
-                    `You have went over the daily limit by ${this.state.total - MAX_Caffeine} `
+                    `You have went over the daily limit by ${this.state.total - MAX_Caffeine}mg `
                 }  
             </div>
            
